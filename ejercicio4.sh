@@ -6,15 +6,14 @@
 # dada (esta se pasará por parametro) y muestre por pantalla el 
 # número de linea donde aparece.
 
-how_to_use()
-
-
+URI=https://lemoncode.net/masteres
 if [ $# -eq 0 ]; then
-  CONTENT='Que me gusta la bash!!!!'
+  echo 'Falta el parametro de búsqueda'
 else
-  CONTENT=$1
+  SEARCH=$1
+  echo "Descargando pagina web $URI"
+  curl -o ./response.txt $URI
+  COUNTLINES=$(grep $SEARCH response.txt | wc -l)
+  LINES=$(grep -n $SEARCH response.txt | cut -d : -f1 | tr "\n" ",")
+  echo "la palabra '$SEARCH' aparece en un total de $COUNTLINES veces, en las lineas ${LINES::-1}"
 fi
-
-SEARCH=$1
-curl -o ./response.txt https://lemoncode.net/
-grep $SEARCH response.txt
