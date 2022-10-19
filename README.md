@@ -55,17 +55,30 @@ info: Microsoft.Hosting.Lifetime[0]
 
 - Dockerizo app backend. Dentro de backend creo el fichero Dockerfile.
 ```
-# Stage 1
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-WORKDIR /build
-COPY . .
-RUN dotnet restore
-RUN dotnet publish -c Release -o /app
-# Stage 2
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:3.1-focal AS base
 WORKDIR /app
-COPY --from=build /app .
-ENTRYPOINT ["dotnet", "Core3Api.dll"]
+EXPOSE 5000
+
+ENV ASPNETCORE_URLS=http://+:5000
+
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+FROM mcr.microsoft.com/dotnet/sdk:3.1-focal AS build
+WORKDIR /src
+COPY ["backend.csproj", "./"]
+RUN dotnet restore "backend.csproj"
+COPY . .
+WORKDIR "/src/."
+RUN dotnet build "backend.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "backend.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "backend.dll"]
 ```
 
 - Fuera de la carpeta backend, en la raiz, creo el fichero docker-compose.yml
@@ -88,7 +101,7 @@ services:
     image: backend
     container_name: backend
     build:
-      context: ./backend
+      context: backend
       dockerfile: ./Dockerfile
     networks: 
         - lemoncode-challenge
@@ -234,33 +247,8 @@ USER node
 CMD ["node", "server.js"]
 ```
 
-- Actualizo la cadena de connecxion del backend. En el fichero server.js subtituir el localhost por backend.
-```
-//Módulos
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-const express = require('express'),
-    app = express();
 
-const LOCAL = 'http://backend:5000/api/topics';
-
-app.set('view engine', 'ejs');
-
-app.get('/', async (req, res) => {
-
-    //Recuperar topics de la API
-    const response = await fetch(process.env.API_URI || LOCAL);
-    const topics = await response.json();
-
-    res.render('index', { topics });
-
-});
-
-app.listen(3000, () => {
-    console.log(`Server running on port 3000 with ${process.env.API_URI || LOCAL}`);
-});
-```
-
-- en el docker-compose de la raiz añado el servicio del frontend
+- en el docker-compose de la raiz añado el servicio del frontend. La cadena de conecxión la configuro mediante la variable de entorno API_URI
 ```
 version: '3.4'
 
