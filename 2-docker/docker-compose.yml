@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  mongo:
+    image: mongo
+    container_name: some-mongo
+    volumes:
+      - mongodbdata:/data/db
+    restart: always
+    networks: 
+      - lemoncode-challenge
+    #ports:
+    #  - 27017:27017   #temporalmente expongo el mongo
+
+  backend:
+    image: backend
+    container_name: backend
+    build:
+      context: backend
+      dockerfile: ./Dockerfile
+    networks: 
+      - lemoncode-challenge
+    #ports:
+    #  - 5000:5000 #temporal expongo el backend
+
+  frontend:
+    image: frontend
+    build:
+      context: frontend
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+      API_URI: http://backend:5000/api/topics
+    networks: 
+      - lemoncode-challenge
+    ports:
+      - 8080:3000
+
+volumes:
+    mongodbdata:
+
+networks:
+    lemoncode-challenge: 
