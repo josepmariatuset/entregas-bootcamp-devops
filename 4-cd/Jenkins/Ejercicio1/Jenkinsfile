@@ -3,14 +3,14 @@ pipeline {
   stages {
     stage('Compile') {
       steps {
-        dir('./calculator') {
+        dir('./4-cd/Jenkins/Ejercicio1/calculator') {
             sh 'gradlew compileJava'
         }
       }
     }
     stage('Unit Test') {
       steps {
-        dir('./calculator') {
+        dir('./4-cd/Jenkins/Ejercicio1/calculator') {
             sh 'gradlew test'
         }
       }
