@@ -1,7 +1,6 @@
 pipeline {
   agent any
   stages {
-stage('')
     stage('Compile') {
       steps {
         dir('./4-cd/Jenkins/Ejercicio1/calculator') {
