@@ -1,5 +1,5 @@
 pipeline {
-  agent any
+  agent { label <'any-with-jdk8-gradle-curl-unzip'> }
   stages {
     stage('Compile') {
       steps {
