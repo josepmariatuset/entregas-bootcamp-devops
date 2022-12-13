@@ -1,0 +1,19 @@
+pipeline {
+  agent any
+  stages {
+    stage('Compile') {
+      steps {
+        dir('./calculator') {
+            sh 'gradlew compileJava'
+        }
+      }
+    }
+    stage('Unit Test') {
+      steps {
+        dir('./calculator') {
+            sh 'gradlew test'
+        }
+      }
+    }
+  }
+}
