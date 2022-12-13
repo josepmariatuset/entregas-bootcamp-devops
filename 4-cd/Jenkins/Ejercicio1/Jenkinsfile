@@ -1,17 +1,13 @@
 pipeline {
-  agent { label <'any-with-jdk8-gradle-curl-unzip'> }
+  agent any
   stages {
+stage('')
     stage('Compile') {
       steps {
         dir('./4-cd/Jenkins/Ejercicio1/calculator') {
-            sh 'gradlew compileJava'
-        }
-      }
-    }
-    stage('Unit Test') {
-      steps {
-        dir('./4-cd/Jenkins/Ejercicio1/calculator') {
-            sh 'gradlew test'
+            withGradle {
+                sh './gradlew compileJava'
+            }
         }
       }
     }
