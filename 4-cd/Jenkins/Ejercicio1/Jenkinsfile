@@ -5,7 +5,8 @@ pipeline {
       steps {
         dir('./4-cd/Jenkins/Ejercicio1/calculator') {
           sh '''
-              chmod +x gradlew
+            java -version
+            chmod +x gradlew
           '''
         }
       }
