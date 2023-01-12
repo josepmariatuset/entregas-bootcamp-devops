@@ -1,0 +1,64 @@
+image: maven:3.6.3-jdk-8
+
+stages:
+  - pre
+  - build
+  - test
+  - docker
+  - deploy
+
+pre-job:
+  stage: pre
+  script:
+    - mvn --version
+    - java -version
+
+build-job:
+  stage: build
+  script:
+    - echo "Compiling the code..."
+    - mvn clean package
+    - echo "Compile complete."
+  artifacts:
+    untracked: false
+    when: on_success
+    expire_in: "30 days"
+    paths:
+      - "target/spring-boot-hello-world-1.0.0-SNAPSHOT.jar"
+
+unit-test-job:
+  stage: test
+  script:
+    - echo "Running unit tests..."
+    - mvn verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+
+docker-build-push-job:
+  image: docker:latest
+  stage: docker
+  script:
+  - echo "Creating docker image"
+  - docker build -t gitlab.local:5001/bootcamp/ejercicio1:$CI_PIPELINE_ID . 
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.local:5001
+  - docker push gitlab.local:5001/bootcamp/ejercicio1:$CI_PIPELINE_ID
+
+deploy-job:
+  image: docker:latest
+
+  stage: deploy
+  script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.local:5001
+  - docker run -d --name ejer1 -p 8080:8080 gitlab.local:5001/bootcamp/ejercicio1:$CI_PIPELINE_ID
+  - CONTAINER_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' ejer1)
+  - sleep 20
+  - docker run --rm curlimages/curl:7.87.0 -SL -v $CONTAINER_IP:8080
+  - docker stop ejer1 
+  - docker rm ejer1 
+  - docker tag gitlab.local:5001/bootcamp/ejercicio1:$CI_PIPELINE_ID gitlab.local:5001/bootcamp/ejercicio1:latest  
+  - docker push gitlab.local:5001/bootcamp/ejercicio1:latest
+  - docker rmi -f gitlab.local:5001/bootcamp/ejercicio1:$CI_PIPELINE_ID 
