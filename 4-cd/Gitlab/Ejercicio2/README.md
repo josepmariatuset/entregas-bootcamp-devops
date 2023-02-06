@@ -51,7 +51,7 @@ Al acceder con el usuario `developer2` aparece el proyecto.
 - No puede acceder a la administración del repo
 
 ## Cambiar a role reporter, comprobar que acciones puede hacer
-Cambio el role del usuario `developer2`a `reporter`
+Cambio el role del usuario `developer2` a `reporter`
 
 - Puede acceder al repo, no puede editar los ficheros directamente, puede hacer un Fork del Repo, puede ver ramas.
 - Puede ver una merge request, puede añadir comentarios pero no puede aprovar una merge request.
@@ -60,7 +60,13 @@ Cambio el role del usuario `developer2`a `reporter`
 - Puede acceder a package y registry (pull images)
 
 ## Cambiar a role developer, comprobar que acciones puede hacer
+Cambio el role del usuario `developer2` a `developer`
 
+A parte de lo que podia hacer con el role `reporter` el usuario puede:
+
+- Puede acceder al repo y editar ficheros.
+- Puede hacer pull & push de imagenes del registry.
+- Puede gestionar las merge request. ()
 ## Cambiar a role maintainer, comprobar que acciones puede hacer
 
 Nota (acciones a probar):
