@@ -6,17 +6,17 @@ La entrega está formada por 3 ejercicios. Cada ejercicio se encuentra en una ca
 
 Jenkins
 
-- [Ejercicio1](Jenkins/Ejercicio1/README.md)
-- [Ejercicio2](Jenkins/Ejercicio2/README.md)
+- [Ejercicio1](Jenkins/Ejercicio1/)
+- [Ejercicio2](Jenkins/Ejercicio2/)
 
 Gitlab
 
-- [Ejercicio1](Gitlab/Ejercicio1/README.md)
-- [Ejercicio2](Gitlab/Ejercicio2/README.md)
+- [Ejercicio1](Gitlab/Ejercicio1/)
+- [Ejercicio2](Gitlab/Ejercicio2/)
 
 
 GitHub Actions
 
-- [Ejercicio1](GitHubActions/Ejercicio1/README.md)
-- [Ejercicio2](GitHubActions/Ejercicio2/README.md)
-- [Ejercicio3](GitHubActions/Ejercicio3/README.md)
+- [Ejercicio1](GitHubActions/Ejercicio1/)
+- [Ejercicio2](GitHubActions/Ejercicio2/)
+- [Ejercicio3](GitHubActions/Ejercicio3/)
