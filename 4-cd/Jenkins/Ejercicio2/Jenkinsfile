@@ -1,0 +1,34 @@
+pipeline {
+  agent {
+    docker { image 'gradle:6.6.1-jre14-openj9' }
+  }
+  stages {
+    stage('Preparation') {
+      steps {
+        dir('./4-cd/Jenkins/Ejercicio1/calculator') {
+          sh '''
+              chmod +x gradlew
+          '''
+        }
+      }
+    }
+    stage('Compile') {
+      steps {
+        dir('./4-cd/Jenkins/Ejercicio1/calculator') {
+          sh '''
+              ./gradlew compileJava
+          '''
+        }
+      }
+    }
+    stage('Unit Test') {
+      steps {
+        dir('./4-cd/Jenkins/Ejercicio1/calculator') {
+          sh '''
+              ./gradlew test
+          '''
+        }
+      }
+    }
+  }
+}
