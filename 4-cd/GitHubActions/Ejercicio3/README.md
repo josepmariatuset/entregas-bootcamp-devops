@@ -1,5 +1,7 @@
 # Ejercicio 3 Github Actions
 
+La implementación de los ejercicios de Github Actions estan realizados en el siguiente [repositorio](https://github.com/josepmariatuset/github-actions-ejercicio1).
+
 ## Crea un workflow que ejecute tests e2e
 
 El punto de partida de este ejercicio es el ejercicio 2.

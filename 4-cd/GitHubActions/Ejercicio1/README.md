@@ -1,5 +1,7 @@
 # Ejercicio 1 Github Actions
 
+La implementación de los ejercicios de Github Actions estan realizados en el siguiente [repositorio](https://github.com/josepmariatuset/github-actions-ejercicio1).
+
 ## CI/CD de una aplicación spring
 
 Copio el proyecto `hangman-front` en el repositorio.

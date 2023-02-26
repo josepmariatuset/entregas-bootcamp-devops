@@ -14,7 +14,6 @@ Gitlab
 - [Ejercicio1](Gitlab/Ejercicio1/)
 - [Ejercicio2](Gitlab/Ejercicio2/)
 
-
 GitHub Actions
 
 - [Ejercicio1](GitHubActions/Ejercicio1/)
