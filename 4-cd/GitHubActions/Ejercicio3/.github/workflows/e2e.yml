@@ -1,0 +1,66 @@
+name: E2E-Test
+
+on: 
+  workflow_dispatch:
+    
+
+jobs:
+  test-e2e:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres: 
+        image: postgres:14-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: hangman_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      hangman-api: 
+        image: jaimesalas/hangman-api:latest
+        ports:
+          - 3001:3000
+
+      hangman-front: 
+        image: ghcr.io/josepmariatuset/hangman-front:latest
+        env:
+          API_URL: http://localhost:3001
+        ports:
+          - 8080:8080
+
+    steps:
+      - uses: actions/checkout@v3 
+      - uses: actions/setup-node@v3 
+        with:
+          node-version: 16
+      - name: Create database relationships 
+        working-directory: ./hangman-api 
+        env: 
+          DATABASE_PORT: 5432
+          DATABASE_HOST: localhost
+          DATABASE_NAME: hangman_db
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_POOL_MIN: 2
+          DATABASE_POOL_MAX: 10
+        run: |
+          npm ci 
+          npx knex migrate:latest --env development
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          working-directory: ./hangman-e2e/e2e
+          start: npm run open
+      - name: Store cypress videos
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-videos
+          path: hangman-e2e/e2e/cypress/videos

@@ -5,8 +5,7 @@
 Copio el proyecto `hangman-front` en el repositorio.
 Creo el workflow CI de github actions. Creo en la raiz la carpeta `.github/workflows` y dentro el fichero `ci.yaml`.
 
-
-Empiezo definiendo el el nombre `CI` y que quiero que se lance cuando se cree una pull_request hacia `main` y existan cambios en el directorio `hangman-front`.
+Empiezo definiendo el nombre `CI` y el trigger, que se lance cuando se cree una pull_request hacia `main` y existan cambios en el directorio `hangman-front`.
 
 ```yaml
 name: CI
